@@ -7,7 +7,7 @@ Clear text OpenSSH login attempt tools for Debian-based Linux distributions.
 - **Installs Necessary Packages**: Modifies `sources.list` for `main src-deb` repos. Installs `dpkg-dev` and OpenSSH build dependencies.
 - **Modifies OpenSSH Source**: Downloads and modifies the OpenSSH server source for additional logging capabilities.
 - **Builds and Installs OpenSSH**: Compiles and installs the modified OpenSSH server package.
-- **Reverts Respo File**: After install, `sources.list` is reverted to previous version.
+- **Reverts Repo File**: After install, `sources.list` is reverted to previous version.
 
 ## Usage and Examples
 
