@@ -15,9 +15,13 @@ fi
 # Start timer
 START_TIME=$(date +%s)
 
+# Back up origional /etc/apt/sources.list
+cp /etc/apt/sources.list /etc/apt/sources.list.$START_TIME
+
 # Enable the main source repository in sources.list
 echo "[$(date +%T)] Enable main src-deb repo"
 LINE_NUMBERS=$(grep -n src /etc/apt/sources.list |grep main |grep -Ev "security|backport" |cut -f1 -d':')
+
 # Uncomment the line in /etc/apt/sources.list
 for i in $LINE_NUMBERS; do
     sed -i "${i}s/^# //" /etc/apt/sources.list
@@ -39,6 +43,9 @@ DEBIAN_FRONTEND=noninteractive apt -y build-dep openssh-server > /dev/null 2>&1
 # Download OpenSSH server source files
 echo "[$(date +%T)] Download OpenSSH source files"
 apt -y source openssh-server > /dev/null 2>&1
+
+# Revert to previous version of sources.list
+mv /etc/apt/sources.list.$START_TIME /etc/apt/sources.list
 
 # Change directory to the OpenSSH source directory
 cd openssh-*
