@@ -16,7 +16,7 @@ fi
 START_TIME=$(date +%s)
 
 # Back up origional /etc/apt/sources.list
-cp /etc/apt/sources.list /etc/apt/sources.list.$START_TIME
+cp /etc/apt/sources.list /etc/apt/sources.list."$START_TIME"
 
 # Enable the main source repository in sources.list
 echo "[$(date +%T)] Enable main src-deb repo"
@@ -45,7 +45,7 @@ echo "[$(date +%T)] Download OpenSSH source files"
 apt -y source openssh-server > /dev/null 2>&1
 
 # Revert to previous version of sources.list
-mv /etc/apt/sources.list.$START_TIME /etc/apt/sources.list
+mv /etc/apt/sources.list."$START_TIME" /etc/apt/sources.list
 
 # Change directory to the OpenSSH source directory
 cd openssh-*
@@ -93,7 +93,7 @@ dpkg -i ../openssh-server_*     > /dev/null 2>&1
 # Increase number of password attempts allowed by ssh server (default ssh client attempts set to 3)
 echo "[$(date +%T)] Change MaxAuthTries setting"
 MAX_AUTH_TRIES_LINE=$(grep -n MaxAuthTries /etc/ssh/sshd_config | cut -f1 -d':')
-if [ ! -z "$MAX_AUTH_TRIES_LINE" ] && [ $(echo "$MAX_AUTH_TRIES_LINE" | wc -l) -eq 1 ]; then
+if [ -n "$MAX_AUTH_TRIES_LINE" ] && [ "$(echo "$MAX_AUTH_TRIES_LINE" | wc -l)" -eq 1 ]; then
   sed -i "${MAX_AUTH_TRIES_LINE}s/.*/MaxAuthTries 1024/" /etc/ssh/sshd_config
 fi
 
